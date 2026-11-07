@@ -1,0 +1,46 @@
+
+ // Pruebas de interfaz de las publicaciones.
+ // Requiere el backend (npm run dev) y el frontend (ionic serve) en ejecución.
+
+describe('Publicaciones', () => {
+  it('muestra las publicaciones del servidor', () => {
+    cy.visit('/login')
+    cy.get('input[autocomplete="username"]').type('ana')
+    cy.get('input[type="password"]').type('ana-12345')
+    cy.get('ion-button[type="submit"]').click()
+    cy.url().should('include', '/publicaciones')
+
+    cy.contains('h2', 'Bienvenidos al Taller 11')
+  })
+
+  // 6: Completa esta prueba (una prueba sin función queda pendiente).
+  it('crea una publicación', () => {
+    cy.visit('/login')
+    cy.get('input[autocomplete="username"]').type('ana')
+    cy.get('input[type="password"]').type('ana-12345')
+    cy.get('ion-button[type="submit"]').click()
+    cy.url().should('include', '/publicaciones')
+
+    const titulo = `Publicación de Cypress ${Date.now()}`
+
+    cy.get('ion-fab-button').click()
+    cy.get('ion-modal input').type(titulo)
+    cy.get('ion-modal textarea').type('Creada por una prueba de interfaz')
+    cy.contains('ion-modal ion-button', 'Guardar').click()
+
+    cy.contains('ion-item', titulo).should('contain', 'Tuya')
+  })
+
+  // 6: Completa esta prueba (una prueba sin función queda pendiente).
+  it('no permite editar publicaciones de otros usuarios', () => {
+    cy.visit('/login')
+    cy.get('input[autocomplete="username"]').type('ana')
+    cy.get('input[type="password"]').type('ana-12345')
+    cy.get('ion-button[type="submit"]').click()
+    cy.url().should('include', '/publicaciones')
+
+    cy.contains('h2', 'Postman')
+      .parents('ion-item-sliding')
+      .should('not.exist')
+  })
+})
